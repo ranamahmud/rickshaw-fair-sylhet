@@ -3,10 +3,13 @@ package com.example.rananoyon.rickshawfairsylhet;
 import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
+import android.widget.TextView;
 
 
 /**
@@ -29,6 +32,11 @@ public class Time extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private int seconds = 0;
+    private boolean running;
+    private boolean wasRunning;
+
+    private Button startButton;
     public Time() {
         // Required empty public constructor
     }
@@ -64,7 +72,43 @@ public class Time extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_time, container, false);
+        View inflatedView = inflater.inflate(R.layout.fragment_time, container, false);
+        //update textview
+        final TextView timeView = (TextView)inflatedView.findViewById(R.id.time_view);
+        final Handler handler = new Handler();
+
+        //find button
+        startButton = inflatedView.findViewById(R.id.start_button);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                running = true;
+            }
+        });
+
+
+        handler.post(new Runnable() {
+            @Override
+            public void run() {
+                int hours = seconds / 3600;
+                int minutes = (seconds % 3600) / 60;
+                int secs = seconds % 60;
+                String time = String.format("%d:%02d:%02d", hours, minutes, secs);
+                timeView.setText(time);
+                if(running)
+
+                {
+                    seconds++;
+                }
+
+                handler.postDelayed(this,1000);
+            }
+        });
+
+
+
+
+        return inflatedView;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -104,5 +148,18 @@ public class Time extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+
+
+    //stop the stopwatch running when the stop button is clicked
+    public void onClickStop(View view) {
+        running = false;
+    }
+
+    //reset the stopwatch when the reset button is clicked
+    public void onClickReset(View view) {
+        running = false;
+        seconds = 0;
     }
 }
