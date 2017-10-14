@@ -137,7 +137,23 @@ public class MainActivity extends AppCompatActivity {
         public Fragment getItem(int position) {
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
-            return PlaceholderFragment.newInstance(position + 1);
+          switch (position){
+              case 0:
+                  Time timeFragment = new Time();
+                  return timeFragment;
+              case 1:
+                  FixedDestination fixedFairFragment = new FixedDestination();
+                  return fixedFairFragment;
+              case 2:
+                    DistanceBased distanceBasedFragment = new DistanceBased();
+                  return  distanceBasedFragment;
+              case 3:
+
+                  Meter meterFragment = new Meter();
+                  return meterFragment;
+
+          }
+          return  null;
         }
 
         @Override
