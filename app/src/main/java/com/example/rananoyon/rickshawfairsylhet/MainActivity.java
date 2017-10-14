@@ -20,7 +20,11 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements Time.OnFragmentInteractionListener,
+        FixedDestination.OnFragmentInteractionListener,
+        Meter.OnFragmentInteractionListener,
+        DistanceBased.OnFragmentInteractionListener
+{
 
     /**
      * The {@link android.support.v4.view.PagerAdapter} that will provide
@@ -89,6 +93,10 @@ public class MainActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onFragmentInteraction(Uri uri) {
+
+    }
 
 
     /**
@@ -126,8 +134,8 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public int getCount() {
-            // Show 3 total pages.
-            return 3;
+            // Show 4 total pages.
+            return 4;
         }
 
         @Override
@@ -145,8 +153,5 @@ public class MainActivity extends AppCompatActivity {
             return null;
         }
     }
-// New code to overcome error
-    public void onFragmentInteraction(Uri uri){
-        //you can leave it empty
-    }
+
 }
