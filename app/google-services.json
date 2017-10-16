@@ -1,0 +1,99 @@
+{
+  "project_info": {
+    "project_number": "533747282840",
+    "firebase_url": "https://rickshaw-fair-sylhet-cse-2ec7f.firebaseio.com",
+    "project_id": "rickshaw-fair-sylhet-cse-2ec7f",
+    "storage_bucket": "rickshaw-fair-sylhet-cse-2ec7f.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533747282840:android:baea468a185aa6d2",
+        "android_client_info": {
+          "package_name": "com.rananayon.rickshawfairsylhet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533747282840-9c5i99hflipf808sroaqggmml1f8ts7i.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.rananayon.rickshawfairsylhet",
+            "certificate_hash": "b5dfd18c08272841f4477465ea75b40af6367b06"
+          }
+        },
+        {
+          "client_id": "533747282840-v74trg7dsvs6o69gm8ide6co68bqqqbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCegh-iCkWwAkZPePJRIVsOpj5H84ATVc0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533747282840-v74trg7dsvs6o69gm8ide6co68bqqqbb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:533747282840:android:1de7091a61a46e2e",
+        "android_client_info": {
+          "package_name": "com.example.rananoyon.rickshawfairsylhet"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "533747282840-h400gqmnr67uals7ralbpk9n40shdi5b.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.rananoyon.rickshawfairsylhet",
+            "certificate_hash": "947d3c493738976d61d1977e14e1a572148527f8"
+          }
+        },
+        {
+          "client_id": "533747282840-v74trg7dsvs6o69gm8ide6co68bqqqbb.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCegh-iCkWwAkZPePJRIVsOpj5H84ATVc0"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "533747282840-v74trg7dsvs6o69gm8ide6co68bqqqbb.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
