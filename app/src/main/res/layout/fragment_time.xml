@@ -16,7 +16,7 @@
         android:textAppearance="?android:attr/textAppearanceLarge"
 
         android:layout_gravity="center_horizontal"
-        android:textSize="92sp"/>
+        android:textSize="92sp"/>q
 
     <Button
         android:id="@+id/start_button"
@@ -53,5 +53,29 @@
         android:layout_marginTop="10dp"
         android:onClick="onClickReset"
         android:text="@string/reset"/>
+    <TextView
+        android:id="@+id/fair_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:text="Fair"
+        android:textAppearance="?android:attr/textAppearanceMedium"
+
+        android:layout_gravity="center_horizontal"
+        android:textSize="92sp"/>q
+    <TextView
+        android:id="@+id/fair_amount_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="0dp"
+        android:text=""
+        android:textAppearance="?android:attr/textAppearanceMedium"
+
+        android:layout_gravity="center_horizontal"
+        android:textSize="92sp"/>q
 
 </LinearLayout>
