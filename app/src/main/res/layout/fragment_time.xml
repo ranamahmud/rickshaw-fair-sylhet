@@ -5,54 +5,68 @@
     tools:context="com.example.rananoyon.rickshawfairsylhet.Time"
     android:orientation="vertical">
 
-    <TextView
-        android:id="@+id/time_view"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentTop="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="0dp"
-        android:text=""
-        android:textAppearance="?android:attr/textAppearanceLarge"
-
-        android:layout_gravity="center_horizontal"
-        android:textSize="92sp"/>q
-
-    <Button
-        android:id="@+id/start_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/time_view"
-        android:layout_centerHorizontal="true"
         android:layout_marginTop="20dp"
-        android:onClick="onClickStart"
+        android:id="@+id/timerBackground"
+        >
+        <TextView
+            android:textColor="#004254"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="60sp"
+            android:text="@string/timer"
+            android:id="@+id/timer">
+        </TextView>
+    </LinearLayout>
+    <LinearLayout
+        android:orientation="horizontal"
         android:layout_gravity="center_horizontal"
-
-        android:text="@string/start"/>
-
-    <Button
-        android:id="@+id/stop_button"
+        android:gravity="center"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/start_button"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-
-        android:layout_marginTop="10dp"
-        android:onClick="onClickStop"
-        android:text="@string/stop"/>
-
-    <Button
-        android:id="@+id/reset_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/stop_button"
-        android:layout_centerHorizontal="true"
-        android:layout_gravity="center_horizontal"
-
-        android:layout_marginTop="10dp"
-        android:onClick="onClickReset"
-        android:text="@string/reset"/>
+        android:layout_marginTop="20dp"
+        >
+        <Button
+            android:layout_marginLeft="5dp"
+            android:layout_marginRight="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textColor="#7A1100"
+            android:shadowColor="#DF726E"
+            android:text="@string/stopText"
+            android:id="@+id/stopButton"
+            android:visibility="gone">
+        </Button>
+        <Button
+            android:layout_marginLeft="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:textColor="#5F3A00"
+            android:shadowColor="#FBEBC5"
+            android:layout_weight="1"
+            android:text="@string/startText"
+            android:id="@+id/startButton">
+        </Button>
+        <Button
+            android:layout_marginRight="5dp"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:textColor="#2E2E2E"
+            android:shadowColor="#959597"
+            android:text="@string/resetText"
+            android:id="@+id/resetButton">
+        </Button>
+    </LinearLayout>
     <TextView
         android:id="@+id/fair_view"
         android:layout_width="wrap_content"

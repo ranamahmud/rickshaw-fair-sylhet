@@ -74,39 +74,10 @@ public class Time extends Fragment {
         // Inflate the layout for this fragment
         View inflatedView = inflater.inflate(R.layout.fragment_time, container, false);
         //update textview
-        final TextView timeView = (TextView)inflatedView.findViewById(R.id.time_view);
-        final Handler handler = new Handler();
+    //    final TextView timeView = (TextView)inflatedView.findViewById(R.id.time_view);
+       // final Handler handler = new Handler();
 
         //find button
-        startButton = inflatedView.findViewById(R.id.start_button);
-        startButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                running = true;
-            }
-        });
-
-
-        handler.post(new Runnable() {
-            @Override
-            public void run() {
-                int hours = seconds / 3600;
-                int minutes = (seconds % 3600) / 60;
-                int secs = seconds % 60;
-                String time = String.format("%d:%02d:%02d", hours, minutes, secs);
-                timeView.setText(time);
-                if(running)
-
-                {
-                    seconds++;
-                }
-
-                handler.postDelayed(this,1000);
-            }
-        });
-
-
-
 
         return inflatedView;
     }
