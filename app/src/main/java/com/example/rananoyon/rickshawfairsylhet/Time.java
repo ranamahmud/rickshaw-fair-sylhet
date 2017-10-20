@@ -84,6 +84,10 @@ public class Time extends Fragment {
         startButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startButton.setVisibility(View.GONE);
+                resetButton.setVisibility(View.GONE);
+                stopButton.setVisibility(View.VISIBLE);
+
 
             }
         });
@@ -91,6 +95,9 @@ public class Time extends Fragment {
         stopButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                startButton.setVisibility(View.VISIBLE);
+                resetButton.setVisibility(View.VISIBLE);
+                stopButton.setVisibility(View.GONE);
 
             }
         });
