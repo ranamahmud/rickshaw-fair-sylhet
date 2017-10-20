@@ -36,7 +36,7 @@ public class Time extends Fragment {
     private boolean running;
     private boolean wasRunning;
 
-    private Button startButton;
+
     public Time() {
         // Required empty public constructor
     }
@@ -78,6 +78,29 @@ public class Time extends Fragment {
        // final Handler handler = new Handler();
 
         //find button
+        final View startButton = inflatedView.findViewById(R.id.startButton);
+        final View stopButton = inflatedView.findViewById(R.id.stopButton);
+        final View resetButton = inflatedView.findViewById(R.id.resetButton);
+        startButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        stopButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
+
+        resetButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+            }
+        });
 
         return inflatedView;
     }

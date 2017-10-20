@@ -64,7 +64,9 @@
             android:textColor="#2E2E2E"
             android:shadowColor="#959597"
             android:text="@string/resetText"
-            android:id="@+id/resetButton">
+            android:id="@+id/resetButton"
+
+            >
         </Button>
     </LinearLayout>
     <TextView
