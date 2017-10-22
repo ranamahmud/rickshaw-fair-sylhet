@@ -32,11 +32,11 @@ public class Time extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
-    private int seconds = 0;
-    private boolean running;
-    private boolean wasRunning;
+    private long startTime;
+    private long elapsedTime;
+    private final int REFRESH_RATE = 100;
     private boolean stopped;
-
+    private Handler mHandler = new Handler();
 
     public Time() {
         // Required empty public constructor
@@ -88,6 +88,14 @@ public class Time extends Fragment {
                 startButton.setVisibility(View.GONE);
                 resetButton.setVisibility(View.GONE);
                 stopButton.setVisibility(View.VISIBLE);
+                if(stopped){
+                    startTime = System.currentTimeMillis() - elapsedTime;
+                }
+                else{
+                    startTime = System.currentTimeMillis();
+                }
+                mHandler.removeCallbacks(startTimer);
+                mHandler.postDelayed(startTimer, 0);
 
 
 
@@ -100,6 +108,8 @@ public class Time extends Fragment {
                 startButton.setVisibility(View.VISIBLE);
                 resetButton.setVisibility(View.VISIBLE);
                 stopButton.setVisibility(View.GONE);
+                mHandler.removeCallbacks(startTimer);
+                stopped = true;
 
             }
         });
@@ -107,6 +117,13 @@ public class Time extends Fragment {
         resetButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
+                stopped = false;
+               try{
+                   ((TextView)getView().findViewById(R.id.timer)).setText("00:00:00");
+               }catch (Exception e){
+
+               }
+
 
             }
         });
@@ -152,7 +169,7 @@ public class Time extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
-    private void updateTimer(float time,View view){
+    private void updateTimer(float time){
         long secs = (long)(time/1000);
         long mins = (long)(secs/60);
         long hours = (long)(mins/60);
@@ -173,11 +190,21 @@ public class Time extends Fragment {
         if(mins <10 && mins > 0){
             minutes = "0"+minutes;
         }
-        ((TextView)view.findViewById(R.id.timer)).setText(hours+":"+minutes+":"+seconds);
+        try {
+            ((TextView)getView().findViewById(R.id.timer)).setText(hours+":"+minutes+":"+seconds);
 
+        }catch (Exception e){
+
+        }
 
     }
-
+    private Runnable startTimer = new Runnable() {
+        public void run() {
+            elapsedTime = System.currentTimeMillis() - startTime;
+            updateTimer(elapsedTime);
+            mHandler.postDelayed(this,REFRESH_RATE);
+        }
+    };
 
 
 }

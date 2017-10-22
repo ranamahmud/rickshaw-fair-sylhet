@@ -12,5 +12,6 @@
     <string name="startText">start</string>
     <string name="resetText">reset</string>
     <string name="stopText">stop</string>
+    <string name="fair_time">00.00 TK</string>
 
 </resources>

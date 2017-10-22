@@ -92,6 +92,23 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
 
         android:layout_gravity="center_horizontal"
-        android:textSize="92sp"/>q
+        android:textSize="30sp"/>
+    <LinearLayout
+        android:orientation="horizontal"
+        android:gravity="center"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        >
+        <TextView
+            android:textColor="#004254"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:textSize="60sp"
+            android:text="@string/fair_time"
+            android:id="@+id/fair_time">
+        </TextView>
+        </LinearLayout>
 
 </LinearLayout>
