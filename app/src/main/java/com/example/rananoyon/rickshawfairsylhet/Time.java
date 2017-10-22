@@ -35,6 +35,7 @@ public class Time extends Fragment {
     private int seconds = 0;
     private boolean running;
     private boolean wasRunning;
+    private boolean stopped;
 
 
     public Time() {
@@ -87,6 +88,7 @@ public class Time extends Fragment {
                 startButton.setVisibility(View.GONE);
                 resetButton.setVisibility(View.GONE);
                 stopButton.setVisibility(View.VISIBLE);
+
 
 
             }
@@ -150,17 +152,32 @@ public class Time extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+    private void updateTimer(float time,View view){
+        long secs = (long)(time/1000);
+        long mins = (long)(secs/60);
+        long hours = (long)(mins/60);
+        secs = secs % 60;
+        String seconds = String.valueOf(secs);
+        if(secs == 0){
+            seconds = "00";
+        }
+        if(secs < 10 && secs > 0){
+            seconds = "0" + seconds;
+        }
+        // Covert minute to string
+        mins = mins % 60;
+        String minutes = String.valueOf(mins);
+        if(mins == 0){
+            minutes = "00";
+        }
+        if(mins <10 && mins > 0){
+            minutes = "0"+minutes;
+        }
+        ((TextView)view.findViewById(R.id.timer)).setText(hours+":"+minutes+":"+seconds);
 
 
-
-    //stop the stopwatch running when the stop button is clicked
-    public void onClickStop(View view) {
-        running = false;
     }
 
-    //reset the stopwatch when the reset button is clicked
-    public void onClickReset(View view) {
-        running = false;
-        seconds = 0;
-    }
+
+
 }
