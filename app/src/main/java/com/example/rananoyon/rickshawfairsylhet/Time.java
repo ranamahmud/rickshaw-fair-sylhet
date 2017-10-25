@@ -171,8 +171,8 @@ public class Time extends Fragment {
     }
     private void updateTimer(float time){
         long secs = (long)(time/1000);
-        long mins = (long)(secs/60);
-        long hours = (long)(mins/60);
+        long mins = secs/60;
+        long hours = mins/60;
         secs = secs % 60;
         String seconds = String.valueOf(secs);
         if(secs == 0){
@@ -190,8 +190,16 @@ public class Time extends Fragment {
         if(mins <10 && mins > 0){
             minutes = "0"+minutes;
         }
+        String hour = String.valueOf(hours);
+        if(hours==0){
+            hour = "00";
+        }
+
+        if(hours < 10 && hours > 0){
+            hour = "0" + hours;
+        }
         try {
-            ((TextView)getView().findViewById(R.id.timer)).setText(hours+":"+minutes+":"+seconds);
+            ((TextView)getView().findViewById(R.id.timer)).setText(hour+":"+minutes+":"+seconds);
 
         }catch (Exception e){
 
