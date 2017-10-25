@@ -4,9 +4,15 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -28,6 +34,11 @@ public class FixedDestination extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
+    private EditText search;
+    private List<Fair> data;
+    private FairAdapter adapter;
+    private RecyclerView fairList;
+
 
     public FixedDestination() {
         // Required empty public constructor
@@ -64,7 +75,23 @@ public class FixedDestination extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fixed_destination, container, false);
+        View view = inflater.inflate(R.layout.fragment_fixed_destination, container, false);
+
+        //inserting elements in list
+        fairList = (RecyclerView) view.findViewById(R.id.list);
+       // data = fill_with_data();
+        data = new ArrayList<>();
+        data.add(new Fair("one","two","three"));
+        data.add(new Fair("one","two","three"));
+        data.add(new Fair("one","two","three"));
+        data.add(new Fair("one","two","three"));
+        adapter = new FairAdapter(data,getContext());
+        fairList.setAdapter(adapter);
+        fairList.setLayoutManager(new LinearLayoutManager(getContext()));
+        search = view.findViewById(R.id.search);
+       // addTextListener();
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -105,4 +132,6 @@ public class FixedDestination extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
+
 }

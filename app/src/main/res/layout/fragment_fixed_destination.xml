@@ -1,21 +1,66 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.rananoyon.rickshawfairsylhet.FixedDestination"
     android:orientation="vertical">
 
-    <!-- Editext for Search -->
-    <EditText android:id="@+id/inputSearch"
-        android:layout_width="fill_parent"
+
+    <LinearLayout
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Search Location.."
-        android:inputType="textVisiblePassword"/>
+        android:weightSum="9">
 
-    <!-- List View -->
-    <ListView
-        android:id="@+id/list_view"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ক্রমিক"
+            android:id="@+id/slNo"
+            android:textSize="21sp"
+            />
 
-</FrameLayout>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="6"
+            android:text="জায়গার বিবরণ"
+            android:id="@+id/placeDescription"
+            android:textAlignment="center"
+            android:textSize="21sp"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="ভাড়ার পরিমাণ"
+            android:id="@+id/fairAmount"
+            android:layout_gravity="end"
+            android:textAlignment="textEnd"
+            android:textSize="21sp"
+
+            />
+
+    </LinearLayout>
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/search"
+        android:layout_gravity="center_vertical"
+        android:paddingLeft="20dp"
+        android:paddingRight="20dp"
+        android:textSize="16sp"
+        android:text="Search here"
+        android:layout_marginTop="20dp"/>
+    <android.support.v7.widget.RecyclerView
+
+        android:layout_height="match_parent"
+        android:layout_width="match_parent"
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:id="@+id/list"
+        />
+
+
+</LinearLayout>
