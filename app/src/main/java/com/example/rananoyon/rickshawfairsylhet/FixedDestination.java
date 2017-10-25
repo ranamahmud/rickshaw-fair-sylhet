@@ -6,6 +6,9 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -85,11 +88,49 @@ public class FixedDestination extends Fragment {
         data.add(new Fair("one","two","three"));
         data.add(new Fair("one","two","three"));
         data.add(new Fair("one","two","three"));
+        data.add(new Fair("rana","rana","three"));
         adapter = new FairAdapter(data,getContext());
         fairList.setAdapter(adapter);
         fairList.setLayoutManager(new LinearLayoutManager(getContext()));
         search = view.findViewById(R.id.search);
-       // addTextListener();
+        search.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                s = s.toString().toLowerCase();
+
+                final List<Fair> fliteredList = new ArrayList<>();
+
+
+                for (int i = 0; i<data.size();i++){
+                    final String text = data.get(i).getLocation();
+                    Log.e("search",text);
+                    Log.e("search",s.toString());
+                    if(text.contains(s))
+                    {
+                        fliteredList.add(data.get(i));
+                    }
+
+                }
+
+                fairList.setLayoutManager(new LinearLayoutManager(getContext()));
+                adapter = new FairAdapter(fliteredList,getContext());
+                fairList.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable editable) {
+
+            }
+        });
+
 
         return view;
     }
