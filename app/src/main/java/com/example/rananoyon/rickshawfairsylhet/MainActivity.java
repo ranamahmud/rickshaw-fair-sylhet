@@ -120,7 +120,7 @@ private static final String TAG = "AnonymousAuth";
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("rickshaw/fair");
-        //myRef.setValue("50");
+        //myRef.setValue("50");//This line is for setting
         myRef.setValue(50);
     }
 
