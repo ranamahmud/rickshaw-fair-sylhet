@@ -28,6 +28,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.util.HashMap;
 
 public class MainActivity extends AppCompatActivity implements Time.OnFragmentInteractionListener,
         FixedDestination.OnFragmentInteractionListener,
@@ -52,6 +56,7 @@ public class MainActivity extends AppCompatActivity implements Time.OnFragmentIn
     // [START declare_auth]
     private FirebaseAuth mAuth;
 // [END declare_auth]
+    private int fair;
 private static final String TAG = "AnonymousAuth";
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +81,7 @@ private static final String TAG = "AnonymousAuth";
 // [END initialize_auth
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
-        if(currentUser ==null){
+        if(currentUser == null) {
             //Sign in anonymously
 
             mAuth.signInAnonymously()
@@ -89,6 +94,7 @@ private static final String TAG = "AnonymousAuth";
                                 FirebaseUser user = mAuth.getCurrentUser();
                                 Toast.makeText(MainActivity.this, "Signed In Successfully",
                                         Toast.LENGTH_SHORT).show();
+                                setFairPrice();
 
                             } else {
                                 // If sign in fails, display a message to the user.
@@ -103,9 +109,19 @@ private static final String TAG = "AnonymousAuth";
                     });
 
 
+        } else if (currentUser!=null){
+            setFairPrice();
         }
 
 
+    }
+
+    private void setFairPrice() {
+
+        FirebaseDatabase database = FirebaseDatabase.getInstance();
+        DatabaseReference myRef = database.getReference("rickshaw/fair");
+        //myRef.setValue("50");
+        myRef.setValue(50);
     }
 
 
