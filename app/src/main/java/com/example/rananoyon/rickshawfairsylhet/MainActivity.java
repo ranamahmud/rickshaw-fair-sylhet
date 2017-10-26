@@ -20,6 +20,8 @@ import android.view.ViewGroup;
 
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+
 public class MainActivity extends AppCompatActivity implements Time.OnFragmentInteractionListener,
         FixedDestination.OnFragmentInteractionListener,
         Meter.OnFragmentInteractionListener,
@@ -40,6 +42,9 @@ public class MainActivity extends AppCompatActivity implements Time.OnFragmentIn
      * The {@link ViewPager} that will host the section contents.
      */
     private ViewPager mViewPager;
+    // [START declare_auth]
+    private FirebaseAuth mAuth;
+// [END declare_auth]
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
