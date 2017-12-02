@@ -80,7 +80,7 @@
         android:textAppearance="?android:attr/textAppearanceMedium"
 
         android:layout_gravity="center_horizontal"
-        android:textSize="92sp"/>q
+        android:textSize="92sp"/>
     <TextView
         android:id="@+id/fair_amount_view"
         android:layout_width="wrap_content"
