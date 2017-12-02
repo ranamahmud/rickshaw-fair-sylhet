@@ -11,8 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
-
 
 /**
  * A simple {@link Fragment} subclass.
@@ -81,87 +79,6 @@ public class Time extends Fragment {
         // Inflate the layout for this fragment
         View inflatedView = inflater.inflate(R.layout.fragment_time, container, false);
 
-        // [START initialize_auth]
-      //  mAuth = FirebaseAuth.getInstance();
-// [END initialize_auth
-        // Check if user is signed in (non-null) and update UI accordingly.
-       // FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser == null) {
-//            //Sign in anonymously
-//
-//            mAuth.signInAnonymously()
-//                    .addOnCompleteListener((Executor) this, new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()) {
-//                                // Sign in success, update UI with the signed-in user's information
-//                                Log.d(TAG, "signInAnonymously:success");
-//
-//                                Toast.makeText(getActivity(), "Signed In Successfully",
-//                                        Toast.LENGTH_SHORT).show();
-//                                FirebaseDatabase database = FirebaseDatabase.getInstance();
-//                                DatabaseReference myRef = database.getReference("rickshaw/fair");
-//                                myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(DataSnapshot dataSnapshot) {
-//                                        HashMap<String, Long> hashmap = (HashMap) dataSnapshot.getValue();
-//                                        fair = hashmap.get("fair");
-//                                        Log.e(TAG, String.valueOf(fair));
-//                                        Toast.makeText(getActivity(), "Fair 1"+fair, Toast.LENGTH_SHORT).show();
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(DatabaseError databaseError) {
-//                                        Toast.makeText(getActivity(), "Check Internet Connection", Toast.LENGTH_SHORT).show();
-//
-//
-//                                    }
-//                                });
-//
-//                            } else {
-//                                // If sign in fails, display a message to the user.
-//                                Log.w(TAG, "signInAnonymously:failure", task.getException());
-//                                Toast.makeText(getActivity(), "Authentication failed.",
-//                                        Toast.LENGTH_SHORT).show();
-//
-//                            }
-//
-//
-//                        }
-//                    });
-//
-//
-//        } else if (currentUser!=null){
-//            FirebaseDatabase database = FirebaseDatabase.getInstance();
-//            DatabaseReference myRef = database.getReference("rickshaw");
-//            myRef.addListenerForSingleValueEvent(new ValueEventListener() {
-//                @Override
-//                public void onDataChange(DataSnapshot dataSnapshot) {
-//                   HashMap<String, Long> hashmap = (HashMap) dataSnapshot.getValue();
-//                    fair = hashmap.get("fair");
-//                    Log.e(TAG, String.valueOf(fair));
-//                    Toast.makeText(getActivity(), "Fair 2", Toast.LENGTH_SHORT).show();
-//
-//                }
-//
-//                @Override
-//                public void onCancelled(DatabaseError databaseError) {
-//                    Toast.makeText(getActivity(), "Check Internet Connection", Toast.LENGTH_SHORT).show();
-//
-//                }
-//            });
-//
-//        }
-//        Toast.makeText(getActivity(), "Fair 3 is "+fair, Toast.LENGTH_SHORT).show();
-//        Log.e(TAG, String.valueOf(fair));
-        //update textview
-    //    final TextView timeView = (TextView)inflatedView.findViewById(R.id.time_view);
-       // final Handler handler = new Handler();
-
-        //find button
-//        if(fair==null){
-//            Toast.makeText(getActivity(), "Please Connect to Internet", Toast.LENGTH_LONG).show();
-//        }
         final View startButton = inflatedView.findViewById(R.id.startButton);
         final View stopButton = inflatedView.findViewById(R.id.stopButton);
         final View resetButton = inflatedView.findViewById(R.id.resetButton);
@@ -282,15 +199,14 @@ public class Time extends Fragment {
         }
         try {
             ((TextView)getView().findViewById(R.id.timer)).setText(hour+":"+minutes+":"+seconds);
-           // if(fair!=null){
+
 
                 double totalFair = (fair*100/3600)*secs;
                 double tk = totalFair/100;
-                double penny = totalFair%100;
-                penny = (fair*100/3600)*penny;
-                Log.e("fair",tk+" "+penny+"Total "+ totalFair);
-                ((TextView)getView().findViewById(R.id.fair_time)).setText(tk+"."+penny);
-            //}
+                String finalFair = String.format("%.2f", tk );
+            Log.e("fair",tk+" "+"Total "+ totalFair);
+                ((TextView)getView().findViewById(R.id.fair_time)).setText(finalFair);
+
 
 
         }catch (Exception e){
