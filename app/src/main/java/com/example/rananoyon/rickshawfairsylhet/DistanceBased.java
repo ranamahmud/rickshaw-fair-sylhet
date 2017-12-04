@@ -65,30 +65,13 @@ public class DistanceBased extends Fragment {
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
 
-        PlaceAutocompleteFragment startLocation = (PlaceAutocompleteFragment)getActivity().
-                getFragmentManager().findFragmentById(R.id.startLocation);
-        startLocation.setOnPlaceSelectedListener(new PlaceSelectionListener() {
-            @Override
-            public void onPlaceSelected(Place place) {
-
-                Toast.makeText(getActivity().getApplicationContext(),place.getName(), Toast.LENGTH_SHORT).show();
-            }
-
-
-
-            @Override
-            public void onError(Status status) {
-
-                Toast.makeText(getActivity().getApplicationContext(),status.toString(),Toast.LENGTH_SHORT).show();
-
-            }
-        });
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_distance_based, container, false);
     }
 

@@ -147,19 +147,15 @@ private static final String TAG = "AnonymousAuth";
             // getItem is called to instantiate the fragment for the given page.
             // Return a PlaceholderFragment (defined as a static inner class below).
           switch (position){
-              case 0:
+              case 2:
                   Time timeFragment = new Time();
                   return timeFragment;
               case 1:
                   FixedDestination fixedFairFragment = new FixedDestination();
                   return fixedFairFragment;
-              case 2:
+              case 0:
                     DistanceBased distanceBasedFragment = new DistanceBased();
                   return  distanceBasedFragment;
-              case 3:
-
-                  Meter meterFragment = new Meter();
-                  return meterFragment;
 
           }
           return  null;
@@ -168,20 +164,19 @@ private static final String TAG = "AnonymousAuth";
         @Override
         public int getCount() {
             // Show 4 total pages.
-            return 4;
+            return 3;
         }
 
         @Override
         public CharSequence getPageTitle(int position) {
             switch (position) {
-                case 0:
+                case 2:
                     return "Time Based";
                 case 1:
                     return "Fixed Fair ";
-                case 2:
+                case 0:
                     return "Distance Based Fair";
-                case 3:
-                    return "On Meter";
+
             }
             return null;
         }
