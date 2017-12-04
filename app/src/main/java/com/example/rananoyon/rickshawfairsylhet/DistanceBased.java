@@ -7,6 +7,12 @@ import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
+
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 
 
 /**
@@ -58,6 +64,25 @@ public class DistanceBased extends Fragment {
             mParam1 = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
+
+        PlaceAutocompleteFragment startLocation = (PlaceAutocompleteFragment)getActivity().
+                getFragmentManager().findFragmentById(R.id.startLocation);
+        startLocation.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+            @Override
+            public void onPlaceSelected(Place place) {
+
+                Toast.makeText(getActivity().getApplicationContext(),place.getName(), Toast.LENGTH_SHORT).show();
+            }
+
+
+
+            @Override
+            public void onError(Status status) {
+
+                Toast.makeText(getActivity().getApplicationContext(),status.toString(),Toast.LENGTH_SHORT).show();
+
+            }
+        });
     }
 
     @Override
