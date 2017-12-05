@@ -2,11 +2,13 @@ package com.example.rananoyon.rickshawfairsylhet;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -39,6 +41,8 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private GoogleMap map;
     private MapView mapView;
     private boolean mapReady = false;
+    private Button button;
+
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -80,6 +84,13 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
+        button = view.findViewById(R.id.getDirectionsButton);
+        button.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_LONG).show();
+            }
+        });
         return view;
 
 
@@ -137,4 +148,24 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         void onFragmentInteraction(Uri uri);
     }
 
+
+    
+//    public void getDirections(View view) {
+//
+//        String startingAddress = et_address.getText().toString();
+//        String finalAddress = et_finalAddress.getText().toString();
+//
+//        if ((startingAddress.equals("")) || finalAddress.equals("")) {
+//            Toast.makeText(getActivity(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+//        } else {
+//            new GetDirections().execute(startingAddress, finalAddress);
+//        }
+//    }
+
+//    private class GetDirections extends AsyncTask {
+//        @Override
+//        protected Object doInBackground(Object[] objects) {
+//            return null;
+//        }
+//    }
 }

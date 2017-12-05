@@ -40,7 +40,8 @@
         android:layout_below="@+id/finishLocation"
         android:layout_marginLeft="96dp"
         android:layout_marginStart="96dp"
-        android:text="Calculate" />
+        android:text="Fair"
+      />
 
 
     <TextView
