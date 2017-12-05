@@ -14,31 +14,30 @@
         android:layout_alignParentStart="true"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="23dp"
+        android:layout_marginTop="12dp"
         android:ems="10"
         />
 
-    <EditText
-        android:id="@+id/finalAddressEditText"
+    <fragment
+        android:id="@+id/finishLocation"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:name="com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
         android:layout_below="@+id/startLocation"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"
-        android:layout_marginTop="23dp"
-        android:ems="10"
-        android:hint="Destination Address"
-        android:inputType="textPostalAddress" />
+        android:layout_marginTop="10dp"
+        android:ems="10" />
 
     <Button
         android:id="@+id/getDirectionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/finalAddressEditText"
-        android:layout_alignStart="@+id/finalAddressEditText"
-        android:layout_below="@+id/finalAddressEditText"
+        android:layout_alignLeft="@+id/finishLocation"
+        android:layout_alignStart="@+id/finishLocation"
+        android:layout_below="@+id/finishLocation"
         android:layout_marginLeft="96dp"
         android:layout_marginStart="96dp"
         android:text="Calculate" />
@@ -48,8 +47,8 @@
         android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/finalAddressEditText"
-        android:layout_alignStart="@+id/finalAddressEditText"
+        android:layout_alignLeft="@+id/finishLocation"
+        android:layout_alignStart="@+id/finishLocation"
         android:layout_below="@+id/getDirectionsButton"
         android:text="Distance:" />
 

@@ -9,10 +9,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
 
-import com.google.android.gms.common.api.Status;
-import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
-import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapView;
+import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
 
 
 /**
@@ -23,7 +25,7 @@ import com.google.android.gms.location.places.ui.PlaceSelectionListener;
  * Use the {@link DistanceBased#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DistanceBased extends Fragment {
+public class DistanceBased extends Fragment implements OnMapReadyCallback {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -34,7 +36,9 @@ public class DistanceBased extends Fragment {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-
+    private GoogleMap map;
+    private MapView mapView;
+    private boolean mapReady = false;
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -70,9 +74,16 @@ public class DistanceBased extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+        View view = inflater.inflate(R.layout.fragment_distance_based, container, false);
         // Inflate the layout for this fragment
 
-        return inflater.inflate(R.layout.fragment_distance_based, container, false);
+        mapView = view.findViewById(R.id.mapView);
+        mapView.onCreate(savedInstanceState);
+        mapView.getMapAsync(this);
+        return view;
+
+
+
     }
 
     // TODO: Rename method, update argument and hook method into UI event
@@ -99,6 +110,18 @@ public class DistanceBased extends Fragment {
         mListener = null;
     }
 
+    @Override
+    public void onMapReady(GoogleMap googleMap) {
+        mapReady = true;
+        map = googleMap;
+        Toast.makeText(getActivity(), "Map is ready", Toast.LENGTH_LONG).show();
+        // Add a marker in Sydney, Australia, and move the camera.
+        LatLng sydney = new LatLng(-34, 151);
+        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
+    }
+
     /**
      * This interface must be implemented by activities that contain this
      * fragment to allow an interaction in this fragment to be communicated
@@ -113,4 +136,5 @@ public class DistanceBased extends Fragment {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
     }
+
 }
