@@ -1,6 +1,7 @@
 package com.example.rananoyon.rickshawfairsylhet;
 
 import android.content.Context;
+import android.graphics.Point;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -16,6 +17,7 @@ import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 
@@ -127,9 +129,24 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         map = googleMap;
         Toast.makeText(getActivity(), "Map is ready", Toast.LENGTH_LONG).show();
         // Add a marker in Sydney, Australia, and move the camera.
-        LatLng sydney = new LatLng(-34, 151);
-        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+//        LatLng sydney = new LatLng(-34, 151);
+//        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
+//        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+        map = googleMap;
+        LatLng origin = new LatLng(-7.788969, 110.338382);
+        LatLng destination = new LatLng(-7.781200, 110.349709);
+        DrawRouteMaps.getInstance(getContext())
+                .draw(origin, destination, map);
+        DrawMarker.getInstance(getContext()).draw(map, origin, R.drawable.marker_a, "Origin Location");
+        DrawMarker.getInstance(getContext()).draw(map, destination, R.drawable.marker_b, "Destination Location");
+
+        LatLngBounds bounds = new LatLngBounds.Builder()
+                .include(origin)
+                .include(destination).build();
+        Point displaySize = new Point();
+        getActivity().getWindowManager().getDefaultDisplay().getSize(displaySize);
+
+        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
 
     }
 
