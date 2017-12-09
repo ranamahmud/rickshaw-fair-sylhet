@@ -102,7 +102,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
 
         SupportPlaceAutocompleteFragment startLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
                getChildFragmentManager().findFragmentById(R.id.startLocation);
-        startLocationAutocompleteFragment.setHint("Search Start Locatoin");
+        startLocationAutocompleteFragment.setHint("Search Start");
         startLocationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
             @Override
@@ -124,8 +124,8 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
 
 
         SupportPlaceAutocompleteFragment finishLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
-                getChildFragmentManager().findFragmentById(R.id.startLocation);
-        finishLocationAutocompleteFragment.setHint("Search Destination Location");
+                getChildFragmentManager().findFragmentById(R.id.finishLocation);
+        finishLocationAutocompleteFragment.setHint("Search Destination");
         finishLocationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
             @Override
