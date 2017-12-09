@@ -3,22 +3,26 @@ package com.example.rananoyon.rickshawfairsylhet;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.common.api.Status;
+import com.google.android.gms.location.places.Place;
+import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
+import com.google.android.gms.location.places.ui.PlaceSelectionListener;
+import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
-import com.google.android.gms.maps.model.MarkerOptions;
 
 
 /**
@@ -34,6 +38,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
+    private static final String TAG = "Place";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -44,7 +49,8 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private MapView mapView;
     private boolean mapReady = false;
     private Button button;
-
+    private Place startPlace;
+    private Place finishPlace;
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -93,6 +99,51 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                 Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_LONG).show();
             }
         });
+
+        SupportPlaceAutocompleteFragment startLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
+               getChildFragmentManager().findFragmentById(R.id.startLocation);
+        startLocationAutocompleteFragment.setHint("Search Start Locatoin");
+        startLocationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Log.i(TAG, "Place: " + place.getName());
+                Toast.makeText(getContext(), "Place "+place.getName(), Toast.LENGTH_SHORT).show();
+                startPlace = place;
+
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+                startPlace = null;
+            }
+        });
+
+
+        SupportPlaceAutocompleteFragment finishLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
+                getChildFragmentManager().findFragmentById(R.id.startLocation);
+        finishLocationAutocompleteFragment.setHint("Search Destination Location");
+        finishLocationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
+
+            @Override
+            public void onPlaceSelected(Place place) {
+                // TODO: Get info about the selected place.
+                Toast.makeText(getContext(), "Place "+place.getName(), Toast.LENGTH_SHORT).show();
+                Log.i(TAG, "Place: " + place.getName());
+                finishPlace = place;
+            }
+
+            @Override
+            public void onError(Status status) {
+                // TODO: Handle the error.
+                Log.i(TAG, "An error occurred: " + status);
+                startPlace = null;
+            }
+        });
+
         return view;
 
 
