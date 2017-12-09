@@ -39,17 +39,19 @@
         android:layout_alignLeft="@+id/finishLocation"
         android:layout_alignStart="@+id/finishLocation"
         android:layout_below="@+id/finishLocation"
-        android:text="Fair" />
+        android:layout_marginLeft="96dp"
+        android:layout_marginStart="96dp"
+        android:text="Fair"
+      />
 
 
     <TextView
         android:id="@+id/distance"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/getDirectionsButton"
-        android:layout_alignBottom="@+id/getDirectionsButton"
-        android:layout_toEndOf="@+id/getDirectionsButton"
-        android:layout_toRightOf="@+id/getDirectionsButton"
+        android:layout_alignLeft="@+id/finishLocation"
+        android:layout_alignStart="@+id/finishLocation"
+        android:layout_below="@+id/getDirectionsButton"
         android:text="Distance:"
         android:textSize="18sp" />
 
@@ -70,16 +72,16 @@
         android:layout_height="fill_parent"
         android:layout_alignParentLeft="true"
         android:layout_alignParentStart="true"
-        android:layout_below="@+id/getDirectionsButton" />
+        android:layout_below="@+id/getDirectionsButton"
+        android:layout_marginTop="42dp" />
 
     <TextView
         android:id="@+id/fair"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/distance_km"
-        android:layout_alignBottom="@+id/distance_km"
-        android:layout_marginLeft="15dp"
-        android:layout_marginStart="15dp"
+        android:layout_below="@+id/getDirectionsButton"
+        android:layout_marginLeft="60dp"
+        android:layout_marginStart="60dp"
         android:layout_toEndOf="@+id/distance_km"
         android:layout_toRightOf="@+id/distance_km"
         android:text="Fair:"
