@@ -11,8 +11,16 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.JsonObjectRequest;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
@@ -67,7 +75,10 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private Place startPlace;
     private Place finishPlace;
     private HttpURLConnection mUrlConnection;
-
+    private TextView mTextView;
+    private String response;
+    private boolean responseOk;
+    private RequestQueue queue;
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -110,6 +121,9 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         button = view.findViewById(R.id.getDirectionsButton);
+        mTextView =  view.findViewById(R.id.fair_tk);
+        queue = Volley.newRequestQueue(getActivity().getApplicationContext());
+
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -130,10 +144,8 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                             DrawRoute(map,startPlace,finishPlace);
 
 
-                                        double distance =  getDistanceInfo(startPlace, finishPlace);
-                                     //   Log.e("distance","Distance "+distance);
 
-
+                                       double distance =  getDistanceInfo(startPlace, finishPlace);
 
 
 
@@ -145,7 +157,10 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-
+                            if(response!=null)
+                            Log.e("response",response);
+                            else
+                                Log.e("response","reponse failed");
         SupportPlaceAutocompleteFragment startLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
                getChildFragmentManager().findFragmentById(R.id.startLocation);
         startLocationAutocompleteFragment.setHint("Search Start");
@@ -296,38 +311,36 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         Double dist = 0.0;
 
 
-        String urlCall = "http://maps.googleapis.com/maps/api/directions/json?origin=" + latFrom
+        String urlCall = "https://maps.googleapis.com/maps/api/directions/json?origin=" + latFrom
                 + "," + lngFrom + "&destination=" + latTo + "," + lngTo + "&mode=driving&sensor=false&key=" + API_KEY;
-      //  DownloadDistance downloadDistance = new DownloadDistance();
-       // downloadDistance.execute(urlCall);
-        URL url = null;
-        try {
-            url = new URL(urlCall);
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
-        }
-        try {
-            mUrlConnection = (HttpURLConnection) url.openConnection();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        InputStreamReader in = null;
-        try {
-            in = new InputStreamReader(mUrlConnection.getInputStream());
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Log.e("response",urlCall);
+        JsonObjectRequest jsObjRequest = new JsonObjectRequest
+                (Request.Method.GET, urlCall, null, new Response.Listener<JSONObject>() {
 
-        // Load the results into a StringBuilder
-            int read;
-            char[] buff = new char[1024];
-        try {
-            while ((read = in.read(buff)) != -1){
-                mJsonResults.append(buff, 0, read);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+                    @Override
+                    public void onResponse(JSONObject response) {
+                        Log.e("response",response.toString());
+
+                      //  mTxtDisplay.setText("Response: " + response.toString());
+                    }
+                }, new Response.ErrorListener() {
+
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                        // TODO Auto-generated method stub
+                        Log.e("response","Error");
+
+
+                    }
+                });
+
+        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue.add(jsObjRequest);
+
+
+
+
+
         Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
             Log.e("distance", String.valueOf(mJsonResults));
 
