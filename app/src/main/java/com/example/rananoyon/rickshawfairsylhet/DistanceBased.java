@@ -79,6 +79,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private String response;
     private boolean responseOk;
     private RequestQueue queue;
+    private JSONObject resultJson;
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -143,14 +144,10 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                             map.clear();
                             DrawRoute(map,startPlace,finishPlace);
 
-
-
                                        double distance =  getDistanceInfo(startPlace, finishPlace);
 
 
-
                         }
-
                     }
                 }else{
                     Log.e("map","Map not ready");
@@ -320,7 +317,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                     @Override
                     public void onResponse(JSONObject response) {
                         Log.e("response",response.toString());
-
+                        resultJson = response;
                       //  mTxtDisplay.setText("Response: " + response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -329,6 +326,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
                         Log.e("response","Error");
+                        resultJson = null;
 
 
                     }
@@ -343,81 +341,33 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
 
         Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
             Log.e("distance", String.valueOf(mJsonResults));
+        if(resultJson!=null) {
+            JSONObject jsonObject;
+            try {
 
-        JSONObject jsonObject;
-        try {
+                jsonObject = new JSONObject(resultJson.toString());
 
-            jsonObject = new JSONObject(mJsonResults.toString());
+                JSONArray array = jsonObject.getJSONArray("routes");
 
-            JSONArray array = jsonObject.getJSONArray("routes");
+                JSONObject routes = array.getJSONObject(0);
 
-            JSONObject routes = array.getJSONObject(0);
+                JSONArray legs = routes.getJSONArray("legs");
 
-            JSONArray legs = routes.getJSONArray("legs");
+                JSONObject steps = legs.getJSONObject(0);
 
-            JSONObject steps = legs.getJSONObject(0);
+                JSONObject distance = steps.getJSONObject("distance");
 
-            JSONObject distance = steps.getJSONObject("distance");
+                Log.i("response", distance.toString());
+                dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]", ""));
 
-            Log.i("Distance", distance.toString());
-            dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]","") );
-
-        } catch (JSONException e) {
-            // TODO Auto-generated catch block
-            e.printStackTrace();
+            } catch (JSONException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+            }
         }
 
         return dist;
     }
-//    private class DownloadDistance extends AsyncTask<String, Void, String> {
-//        StringBuilder mJsonResults = new StringBuilder();
-//
-//        protected String doInBackground(String... strings) {
-//            URL url = null;
-//
-//            try {
-//                Log.e("url", String.valueOf(url));
-//                url = new URL(strings[0]);
-//            } catch (MalformedURLException e) {
-//                e.printStackTrace();
-//            }
-//            try {
-//                Log.e("url","connection opened");
-//                mUrlConnection = (HttpURLConnection) url.openConnection();
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            InputStreamReader in = null;
-//            try {
-//                in = new InputStreamReader(mUrlConnection.getInputStream());
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//
-//            // Load the results into a StringBuilder
-//            int read;
-//            char[] buff = new char[1024];
-//            try {
-//                while ((read = in.read(buff)) != -1){
-//                    mJsonResults.append(buff, 0, read);
-//                }
-//            } catch (IOException e) {
-//                e.printStackTrace();
-//            }
-//            Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
-//            Log.e("distance", String.valueOf(mJsonResults));
-//            return String.valueOf(mJsonResults);
-//        }
-//
-//        protected void onProgressUpdate(Integer... progress) {
-//
-//        }
-//
-//        protected void onPostExecute(Long result) {
-//            Log.e("success", String.valueOf(mJsonResults));
-//            Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
-//        }
-//    }
 
 
 }
