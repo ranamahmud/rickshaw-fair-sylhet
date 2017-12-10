@@ -99,4 +99,12 @@
         android:layout_toRightOf="@+id/fair"
         android:text="0.0 Taka"
         android:textSize="18sp" />
+
+    <ProgressBar
+        android:id="@+id/progressBar2"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignBottom="@+id/fair"
+        android:layout_centerHorizontal="true" />
 </RelativeLayout>

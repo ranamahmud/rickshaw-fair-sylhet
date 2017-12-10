@@ -3,6 +3,7 @@ package com.example.rananoyon.rickshawfairsylhet;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -23,6 +24,19 @@ import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
+import com.google.android.gms.maps.model.MarkerOptions;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 
 
 /**
@@ -39,6 +53,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private static final String ARG_PARAM1 = "param1";
     private static final String ARG_PARAM2 = "param2";
     private static final String TAG = "Place";
+    private static final String API_KEY = "AIzaSyDKb5fdOHXBMKWZq7S9D09rFzkOyEmi7lE";
 
     // TODO: Rename and change types of parameters
     private String mParam1;
@@ -51,6 +66,8 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private Button button;
     private Place startPlace;
     private Place finishPlace;
+    private HttpURLConnection mUrlConnection;
+
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -97,6 +114,35 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_LONG).show();
+                if(mapReady==true){
+                    if(startPlace==null || finishPlace == null)
+                    {
+                        Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+
+                    }else {
+                        String startingAddress = startPlace.getName().toString();
+                        String finalAddress = finishPlace.getName().toString();
+
+                        if ((startingAddress.equals("")) || finalAddress.equals("")) {
+                            Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+                        } else {
+                            map.clear();
+                            DrawRoute(map,startPlace,finishPlace);
+
+
+                                        double distance =  getDistanceInfo(startPlace, finishPlace);
+                                     //   Log.e("distance","Distance "+distance);
+
+
+
+
+
+                        }
+
+                    }
+                }else{
+                    Log.e("map","Map not ready");
+                }
             }
         });
 
@@ -179,17 +225,41 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         mapReady = true;
         map = googleMap;
         Toast.makeText(getActivity(), "Map is ready", Toast.LENGTH_LONG).show();
-        // Add a marker in Sydney, Australia, and move the camera.
-//        LatLng sydney = new LatLng(-34, 151);
-//        map.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-//        map.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+
         map = googleMap;
-        LatLng origin = new LatLng(-7.788969, 110.338382);
-        LatLng destination = new LatLng(-7.781200, 110.349709);
+        if(startPlace==null || finishPlace == null)
+        {
+            Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+
+        }else {
+            String startingAddress = startPlace.getName().toString();
+            String finalAddress = finishPlace.getName().toString();
+
+            if ((startingAddress.equals("")) || finalAddress.equals("")) {
+                Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+            } else {
+                DrawRoute(map,startPlace,finishPlace);
+            }
+
+        }
+
+
+
+    }
+
+    private void DrawRoute(GoogleMap googleMap,Place start, Place finish) {
+        GoogleMap map = googleMap;
+        Place startPlace = start;
+        Place finishPlace = finish;
+        LatLng origin = startPlace.getLatLng();
+        LatLng destination = finishPlace.getLatLng();
         DrawRouteMaps.getInstance(getContext())
                 .draw(origin, destination, map);
-        DrawMarker.getInstance(getContext()).draw(map, origin, R.drawable.marker_a, "Origin Location");
-        DrawMarker.getInstance(getContext()).draw(map, destination, R.drawable.marker_b, "Destination Location");
+        map.addMarker(new MarkerOptions().position(startPlace.getLatLng()).title(String.valueOf(startPlace.getName())));
+        map.addMarker(new MarkerOptions().position(finishPlace.getLatLng()).title(String.valueOf(finishPlace.getName())));
+
+        // DrawMarker.getInstance(getContext()).draw(map, origin, R.drawable.marker_a, "Origin Location");
+      //  DrawMarker.getInstance(getContext()).draw(map, destination, R.drawable.marker_b, "Destination Location");
 
         LatLngBounds bounds = new LatLngBounds.Builder()
                 .include(origin)
@@ -198,7 +268,6 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         getActivity().getWindowManager().getDefaultDisplay().getSize(displaySize);
 
         map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 30));
-
     }
 
     /**
@@ -217,23 +286,125 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     }
 
 
-    
-//    public void getDirections(View view) {
+
+    private double getDistanceInfo(Place startPlace, Place finishPlace) {
+        double latFrom = startPlace.getLatLng().latitude;
+        double lngFrom = startPlace.getLatLng().longitude;
+        double latTo = finishPlace.getLatLng().latitude;
+        double lngTo = finishPlace.getLatLng().longitude;
+        StringBuilder mJsonResults = new StringBuilder();
+        Double dist = 0.0;
+
+
+        String urlCall = "http://maps.googleapis.com/maps/api/directions/json?origin=" + latFrom
+                + "," + lngFrom + "&destination=" + latTo + "," + lngTo + "&mode=driving&sensor=false&key=" + API_KEY;
+      //  DownloadDistance downloadDistance = new DownloadDistance();
+       // downloadDistance.execute(urlCall);
+        URL url = null;
+        try {
+            url = new URL(urlCall);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+        try {
+            mUrlConnection = (HttpURLConnection) url.openConnection();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        InputStreamReader in = null;
+        try {
+            in = new InputStreamReader(mUrlConnection.getInputStream());
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        // Load the results into a StringBuilder
+            int read;
+            char[] buff = new char[1024];
+        try {
+            while ((read = in.read(buff)) != -1){
+                mJsonResults.append(buff, 0, read);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
+            Log.e("distance", String.valueOf(mJsonResults));
+
+        JSONObject jsonObject;
+        try {
+
+            jsonObject = new JSONObject(mJsonResults.toString());
+
+            JSONArray array = jsonObject.getJSONArray("routes");
+
+            JSONObject routes = array.getJSONObject(0);
+
+            JSONArray legs = routes.getJSONArray("legs");
+
+            JSONObject steps = legs.getJSONObject(0);
+
+            JSONObject distance = steps.getJSONObject("distance");
+
+            Log.i("Distance", distance.toString());
+            dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]","") );
+
+        } catch (JSONException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        return dist;
+    }
+//    private class DownloadDistance extends AsyncTask<String, Void, String> {
+//        StringBuilder mJsonResults = new StringBuilder();
 //
-//        String startingAddress = et_address.getText().toString();
-//        String finalAddress = et_finalAddress.getText().toString();
+//        protected String doInBackground(String... strings) {
+//            URL url = null;
 //
-//        if ((startingAddress.equals("")) || finalAddress.equals("")) {
-//            Toast.makeText(getActivity(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
-//        } else {
-//            new GetDirections().execute(startingAddress, finalAddress);
+//            try {
+//                Log.e("url", String.valueOf(url));
+//                url = new URL(strings[0]);
+//            } catch (MalformedURLException e) {
+//                e.printStackTrace();
+//            }
+//            try {
+//                Log.e("url","connection opened");
+//                mUrlConnection = (HttpURLConnection) url.openConnection();
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            InputStreamReader in = null;
+//            try {
+//                in = new InputStreamReader(mUrlConnection.getInputStream());
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//
+//            // Load the results into a StringBuilder
+//            int read;
+//            char[] buff = new char[1024];
+//            try {
+//                while ((read = in.read(buff)) != -1){
+//                    mJsonResults.append(buff, 0, read);
+//                }
+//            } catch (IOException e) {
+//                e.printStackTrace();
+//            }
+//            Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
+//            Log.e("distance", String.valueOf(mJsonResults));
+//            return String.valueOf(mJsonResults);
+//        }
+//
+//        protected void onProgressUpdate(Integer... progress) {
+//
+//        }
+//
+//        protected void onPostExecute(Long result) {
+//            Log.e("success", String.valueOf(mJsonResults));
+//            Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
 //        }
 //    }
 
-//    private class GetDirections extends AsyncTask {
-//        @Override
-//        protected Object doInBackground(Object[] objects) {
-//            return null;
-//        }
-//    }
+
 }
