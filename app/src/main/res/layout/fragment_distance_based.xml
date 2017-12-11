@@ -50,10 +50,9 @@
         android:id="@+id/getDirectionsButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/fair"
+        android:layout_alignRight="@+id/fair"
         android:layout_below="@+id/finishLinear"
-        android:layout_toEndOf="@+id/distance_km"
-        android:layout_toRightOf="@+id/distance_km"
-        android:layout_centerHorizontal="true"
         android:text="Fair" />
 
 
@@ -92,9 +91,8 @@
         android:id="@+id/fair"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignEnd="@+id/getDirectionsButton"
-        android:layout_alignRight="@+id/getDirectionsButton"
         android:layout_below="@+id/getDirectionsButton"
+        android:layout_centerHorizontal="true"
         android:text="Fair:"
         android:textSize="18sp" />
 
@@ -102,10 +100,7 @@
         android:id="@+id/fair_tk"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/fair"
-        android:layout_alignBottom="@+id/fair"
-        android:layout_marginLeft="12dp"
-        android:layout_marginStart="12dp"
+        android:layout_below="@+id/getDirectionsButton"
         android:layout_toEndOf="@+id/fair"
         android:layout_toRightOf="@+id/fair"
         android:text="0.0 Taka"
