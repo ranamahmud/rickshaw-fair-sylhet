@@ -69,11 +69,12 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private Button button;
     private Place startPlace;
     private Place finishPlace;
-    private TextView distaqnceTextView;
+    private TextView distanceTextView;
+    private TextView fairTextView;
     private RequestQueue queue;
     private JSONObject resultJson;
     private double dist;
-
+    private double totalFair;
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -116,7 +117,8 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         button = view.findViewById(R.id.getDirectionsButton);
-        distaqnceTextView = view.findViewById(R.id.distance_km);
+        distanceTextView = view.findViewById(R.id.distance_km);
+        fairTextView = view.findViewById(R.id.fair_tk);
         queue = Volley.newRequestQueue(getActivity().getApplicationContext());
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -330,7 +332,18 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                         }
 
                         String result = " " + dist + " KM";
-                        distaqnceTextView.setText(result);
+                        distanceTextView.setText(result);
+                        totalFair = 0;
+                        if(dist!=0){
+                            if(dist<=3){
+                                totalFair = dist*10;
+                            }else{
+                                dist-=3;
+                                totalFair+=30;
+                                totalFair = totalFair+dist*7;
+                            }
+                            fairTextView.setText(" "+totalFair+" Taka");
+                        }
                         Log.e("response", result);
 
                         //  mTxtDisplay.setText("Response: " + response.toString());
@@ -342,7 +355,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                         // TODO Auto-generated method stub
                         Log.e("response", "Error");
                         resultJson = null;
-                        distaqnceTextView.setText("0.0 KM");
+                        distanceTextView.setText("0.0 KM");
 
                     }
                 });
