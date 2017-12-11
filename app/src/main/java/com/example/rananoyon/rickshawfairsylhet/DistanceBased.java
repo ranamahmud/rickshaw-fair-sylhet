@@ -3,7 +3,6 @@ package com.example.rananoyon.rickshawfairsylhet;
 import android.content.Context;
 import android.graphics.Point;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.util.Log;
@@ -19,11 +18,9 @@ import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonObjectRequest;
-import com.android.volley.toolbox.StringRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
 import com.google.android.gms.location.places.Place;
-import com.google.android.gms.location.places.ui.PlaceAutocompleteFragment;
 import com.google.android.gms.location.places.ui.PlaceSelectionListener;
 import com.google.android.gms.location.places.ui.SupportPlaceAutocompleteFragment;
 import com.google.android.gms.maps.CameraUpdateFactory;
@@ -38,13 +35,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 
 
 /**
@@ -74,12 +65,11 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private Button button;
     private Place startPlace;
     private Place finishPlace;
-    private HttpURLConnection mUrlConnection;
-    private TextView mTextView;
-    private String response;
-    private boolean responseOk;
+    private TextView distaqnceTextView;
     private RequestQueue queue;
     private JSONObject resultJson;
+    private double dist;
+
     public DistanceBased() {
         // Required empty public constructor
     }
@@ -122,7 +112,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         button = view.findViewById(R.id.getDirectionsButton);
-        mTextView =  view.findViewById(R.id.fair_tk);
+        distaqnceTextView =  view.findViewById(R.id.distance_km);
         queue = Volley.newRequestQueue(getActivity().getApplicationContext());
 
         button.setOnClickListener(new View.OnClickListener() {
@@ -132,21 +122,18 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                 if(mapReady==true){
                     if(startPlace==null || finishPlace == null)
                     {
-                        Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
 
                     }else {
                         String startingAddress = startPlace.getName().toString();
                         String finalAddress = finishPlace.getName().toString();
 
                         if ((startingAddress.equals("")) || finalAddress.equals("")) {
-                            Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
                         } else {
                             map.clear();
                             DrawRoute(map,startPlace,finishPlace);
-
-                                       double distance =  getDistanceInfo(startPlace, finishPlace);
-
-
+                                       getDistanceInfo(startPlace, finishPlace);
                         }
                     }
                 }else{
@@ -154,10 +141,6 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                 }
             }
         });
-                            if(response!=null)
-                            Log.e("response",response);
-                            else
-                                Log.e("response","reponse failed");
         SupportPlaceAutocompleteFragment startLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
                getChildFragmentManager().findFragmentById(R.id.startLocation);
         startLocationAutocompleteFragment.setHint("Search Start");
@@ -297,15 +280,12 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         void onFragmentInteraction(Uri uri);
     }
 
-
-
-    private double getDistanceInfo(Place startPlace, Place finishPlace) {
+    private void getDistanceInfo(Place startPlace, Place finishPlace) {
         double latFrom = startPlace.getLatLng().latitude;
         double lngFrom = startPlace.getLatLng().longitude;
         double latTo = finishPlace.getLatLng().latitude;
         double lngTo = finishPlace.getLatLng().longitude;
         StringBuilder mJsonResults = new StringBuilder();
-        Double dist = 0.0;
 
 
         String urlCall = "https://maps.googleapis.com/maps/api/directions/json?origin=" + latFrom
@@ -318,6 +298,36 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                     public void onResponse(JSONObject response) {
                         Log.e("response",response.toString());
                         resultJson = response;
+                        if(resultJson!=null) {
+                            JSONObject jsonObject;
+                            try {
+
+                                jsonObject = new JSONObject(resultJson.toString());
+
+                                JSONArray array = jsonObject.getJSONArray("routes");
+
+                                JSONObject routes = array.getJSONObject(0);
+
+                                JSONArray legs = routes.getJSONArray("legs");
+
+                                JSONObject steps = legs.getJSONObject(0);
+
+                                JSONObject distance = steps.getJSONObject("distance");
+
+                                dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]", ""));
+                                Log.i("response", distance.toString());
+
+
+                            } catch (JSONException e) {
+                                // TODO Auto-generated catch block
+                                e.printStackTrace();
+                            }
+                        }
+
+                        String result = " "+dist+" KM";
+                        distaqnceTextView.setText(result);
+                        Log.e("response",result);
+
                       //  mTxtDisplay.setText("Response: " + response.toString());
                     }
                 }, new Response.ErrorListener() {
@@ -327,46 +337,17 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                         // TODO Auto-generated method stub
                         Log.e("response","Error");
                         resultJson = null;
-
+                        distaqnceTextView.setText("0.0 KM");
 
                     }
                 });
 
-        RequestQueue queue = Volley.newRequestQueue(getContext());
+        queue = Volley.newRequestQueue(getContext());
         queue.add(jsObjRequest);
-
-
-
-
-
         Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
             Log.e("distance", String.valueOf(mJsonResults));
-        if(resultJson!=null) {
-            JSONObject jsonObject;
-            try {
 
-                jsonObject = new JSONObject(resultJson.toString());
 
-                JSONArray array = jsonObject.getJSONArray("routes");
-
-                JSONObject routes = array.getJSONObject(0);
-
-                JSONArray legs = routes.getJSONArray("legs");
-
-                JSONObject steps = legs.getJSONObject(0);
-
-                JSONObject distance = steps.getJSONObject("distance");
-
-                Log.i("response", distance.toString());
-                dist = Double.parseDouble(distance.getString("text").replaceAll("[^\\.0123456789]", ""));
-
-            } catch (JSONException e) {
-                // TODO Auto-generated catch block
-                e.printStackTrace();
-            }
-        }
-
-        return dist;
     }
 
 
