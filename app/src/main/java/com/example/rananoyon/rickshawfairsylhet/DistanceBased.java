@@ -13,10 +13,15 @@ import android.widget.Button;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.android.volley.Cache;
+import com.android.volley.Network;
 import com.android.volley.Request;
 import com.android.volley.RequestQueue;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
+import com.android.volley.toolbox.BasicNetwork;
+import com.android.volley.toolbox.DiskBasedCache;
+import com.android.volley.toolbox.HurlStack;
 import com.android.volley.toolbox.JsonObjectRequest;
 import com.android.volley.toolbox.Volley;
 import com.google.android.gms.common.api.Status;
@@ -35,7 +40,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.net.HttpURLConnection;
 
 
 /**
@@ -112,19 +116,18 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
         button = view.findViewById(R.id.getDirectionsButton);
-        distaqnceTextView =  view.findViewById(R.id.distance_km);
+        distaqnceTextView = view.findViewById(R.id.distance_km);
         queue = Volley.newRequestQueue(getActivity().getApplicationContext());
 
         button.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_LONG).show();
-                if(mapReady==true){
-                    if(startPlace==null || finishPlace == null)
-                    {
+                // Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_LONG).show();
+                if (mapReady == true) {
+                    if (startPlace == null || finishPlace == null) {
                         Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
 
-                    }else {
+                    } else {
                         String startingAddress = startPlace.getName().toString();
                         String finalAddress = finishPlace.getName().toString();
 
@@ -132,17 +135,17 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                             Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
                         } else {
                             map.clear();
-                            DrawRoute(map,startPlace,finishPlace);
-                                       getDistanceInfo(startPlace, finishPlace);
+                            DrawRoute(map, startPlace, finishPlace);
+                            getDistanceInfo(startPlace, finishPlace);
                         }
                     }
-                }else{
-                    Log.e("map","Map not ready");
+                } else {
+                    Log.e("map", "Map not ready");
                 }
             }
         });
         SupportPlaceAutocompleteFragment startLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
-               getChildFragmentManager().findFragmentById(R.id.startLocation);
+                getChildFragmentManager().findFragmentById(R.id.startLocation);
         startLocationAutocompleteFragment.setHint("Search Start");
         startLocationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
@@ -150,7 +153,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
                 Log.i(TAG, "Place: " + place.getName());
-                Toast.makeText(getContext(), "Place "+place.getName(), Toast.LENGTH_SHORT).show();
+                // Toast.makeText(getContext(), "Place "+place.getName(), Toast.LENGTH_SHORT).show();
                 startPlace = place;
 
             }
@@ -172,7 +175,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
             @Override
             public void onPlaceSelected(Place place) {
                 // TODO: Get info about the selected place.
-                Toast.makeText(getContext(), "Place "+place.getName(), Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getContext(), "Place "+place.getName(), Toast.LENGTH_SHORT).show();
                 Log.i(TAG, "Place: " + place.getName());
                 finishPlace = place;
             }
@@ -186,7 +189,6 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         });
 
         return view;
-
 
 
     }
@@ -219,30 +221,28 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     public void onMapReady(GoogleMap googleMap) {
         mapReady = true;
         map = googleMap;
-        Toast.makeText(getActivity(), "Map is ready", Toast.LENGTH_LONG).show();
+        // Toast.makeText(getActivity(), "Map is ready", Toast.LENGTH_LONG).show();
 
         map = googleMap;
-        if(startPlace==null || finishPlace == null)
-        {
-            Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+        if (startPlace == null || finishPlace == null) {
+            Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
 
-        }else {
+        } else {
             String startingAddress = startPlace.getName().toString();
             String finalAddress = finishPlace.getName().toString();
 
             if ((startingAddress.equals("")) || finalAddress.equals("")) {
-                Toast.makeText(getContext(), "Enter a starting and Ending address", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
             } else {
-                DrawRoute(map,startPlace,finishPlace);
+                DrawRoute(map, startPlace, finishPlace);
             }
 
         }
 
 
-
     }
 
-    private void DrawRoute(GoogleMap googleMap,Place start, Place finish) {
+    private void DrawRoute(GoogleMap googleMap, Place start, Place finish) {
         GoogleMap map = googleMap;
         Place startPlace = start;
         Place finishPlace = finish;
@@ -254,7 +254,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         map.addMarker(new MarkerOptions().position(finishPlace.getLatLng()).title(String.valueOf(finishPlace.getName())));
 
         // DrawMarker.getInstance(getContext()).draw(map, origin, R.drawable.marker_a, "Origin Location");
-      //  DrawMarker.getInstance(getContext()).draw(map, destination, R.drawable.marker_b, "Destination Location");
+        //  DrawMarker.getInstance(getContext()).draw(map, destination, R.drawable.marker_b, "Destination Location");
 
         LatLngBounds bounds = new LatLngBounds.Builder()
                 .include(origin)
@@ -290,15 +290,20 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
 
         String urlCall = "https://maps.googleapis.com/maps/api/directions/json?origin=" + latFrom
                 + "," + lngFrom + "&destination=" + latTo + "," + lngTo + "&mode=driving&sensor=false&key=" + API_KEY;
-        Log.e("response",urlCall);
+        Log.e("response", urlCall);
+        // Setup 1 MB disk-based cache for Volley
+        Cache cache = new DiskBasedCache(getActivity().getCacheDir(), 1024 * 1024);
+
+        // Use HttpURLConnection as the HTTP client
+        Network network = new BasicNetwork(new HurlStack());
         JsonObjectRequest jsObjRequest = new JsonObjectRequest
                 (Request.Method.GET, urlCall, null, new Response.Listener<JSONObject>() {
 
                     @Override
                     public void onResponse(JSONObject response) {
-                        Log.e("response",response.toString());
+                        Log.e("response", response.toString());
                         resultJson = response;
-                        if(resultJson!=null) {
+                        if (resultJson != null) {
                             JSONObject jsonObject;
                             try {
 
@@ -324,18 +329,18 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                             }
                         }
 
-                        String result = " "+dist+" KM";
+                        String result = " " + dist + " KM";
                         distaqnceTextView.setText(result);
-                        Log.e("response",result);
+                        Log.e("response", result);
 
-                      //  mTxtDisplay.setText("Response: " + response.toString());
+                        //  mTxtDisplay.setText("Response: " + response.toString());
                     }
                 }, new Response.ErrorListener() {
 
                     @Override
                     public void onErrorResponse(VolleyError error) {
                         // TODO Auto-generated method stub
-                        Log.e("response","Error");
+                        Log.e("response", "Error");
                         resultJson = null;
                         distaqnceTextView.setText("0.0 KM");
 
@@ -344,11 +349,10 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
 
         queue = Volley.newRequestQueue(getContext());
         queue.add(jsObjRequest);
-        Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
-            Log.e("distance", String.valueOf(mJsonResults));
+        // Toast.makeText(getContext(), mJsonResults, Toast.LENGTH_SHORT).show();
+        Log.e("distance", String.valueOf(mJsonResults));
 
 
     }
-
 
 }
