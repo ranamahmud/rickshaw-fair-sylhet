@@ -342,7 +342,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                                 totalFair+=30;
                                 totalFair = totalFair+dist*7;
                             }
-                            fairTextView.setText(" "+totalFair+" Taka");
+                            fairTextView.setText(" "+String.format("%.2f", totalFair )+" Taka");
                         }
                         Log.e("response", result);
 

@@ -203,7 +203,7 @@ public class Time extends Fragment {
 
                 double totalFair = (fair*100/3600)*secs;
                 double tk = totalFair/100;
-                String finalFair = String.format("%.2f", tk );
+                String finalFair = String.format("%.2f", tk)+" Taka";
             Log.e("fair",tk+" "+"Total "+ totalFair);
                 ((TextView)getView().findViewById(R.id.fair_time)).setText(finalFair);
 
