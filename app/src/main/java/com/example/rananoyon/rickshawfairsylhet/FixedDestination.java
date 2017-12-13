@@ -1,6 +1,9 @@
 package com.example.rananoyon.rickshawfairsylhet;
 
 import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -14,14 +17,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Locale;
 
 
 /**
@@ -44,10 +44,12 @@ public class FixedDestination extends Fragment {
 
     private OnFragmentInteractionListener mListener;
     private EditText search;
-    private List<Fair> data;
+    private List<Fair> fairs;
     private FairAdapter adapter;
     private RecyclerView fairList;
-
+    private SQLiteDatabase fairDataBase;
+    private Cursor cursor;
+    private ArrayList<Fair> fliteredList;
 
     public FixedDestination() {
         // Required empty public constructor
@@ -88,36 +90,52 @@ public class FixedDestination extends Fragment {
 
         //inserting elements in list
         fairList = (RecyclerView) view.findViewById(R.id.list);
-        data = new ArrayList<>();
-        //read data from file
-        InputStream fairData = getContext().getResources().openRawResource(R.raw.fair);
 
-        String fairLine;
+        //read data from database
+
+        DataBaseHelper myDbHelper = new DataBaseHelper(getActivity().getApplicationContext());
         try {
 
-            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fairData));
-            while ((fairLine = bufferedReader.readLine()) != null) {
-                String[] row = fairLine.split("\t");
-              //  data.add(new Fair(row[0],row[1],row[2]));
+            myDbHelper.createDataBase();
 
-                Log.e("row", String.valueOf(fairLine));
-                //word = new Word(row[0], row[1]);
-                //wordList.add(word);
-            }
-            Log.e("row","success");
-        } catch (IOException e) {
-            Log.e("row","failure)");
+        } catch (IOException ioe) {
+
+            throw new Error("Unable to create database");
 
         }
 
-        // data = fill_with_data();
+        try {
 
-//        data.add(new Fair("one","two","three"));
-//        data.add(new Fair("one","two","three"));
-//        data.add(new Fair("one","two","three"));
-//        data.add(new Fair("one","two","three"));
+            myDbHelper.openDataBase();
+
+        } catch (SQLException sqle) {
+
+            throw sqle;
+
+        }
+        cursor = myDbHelper.query("fair", null, null, null, null, null, null);
+
+        // 3. go over each row, build book and add it to list
+         fairs = new LinkedList<Fair>();
+        Fair fair;
+        if (cursor.moveToFirst()) {
+            do {
+
+                String id = String.valueOf(cursor.getInt(0));
+                fair = new Fair(id,cursor.getString(1),cursor.getString(2),cursor.getString(3),cursor.getString(4));
+
+                Log.e("fair",fair.getLocation());
+                // Add book to books
+                fairs.add(fair);
+            } while (cursor.moveToNext());
+        }
+
+        Log.d("getAllBooks()", fairs.toString());
+
+
+
 //        data.add(new Fair("rana","rana","three"));
-        adapter = new FairAdapter(data,getContext());
+        adapter = new FairAdapter(fairs,getContext());
         fairList.setAdapter(adapter);
         fairList.setLayoutManager(new LinearLayoutManager(getContext()));
         search = view.findViewById(R.id.search);
@@ -129,20 +147,25 @@ public class FixedDestination extends Fragment {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                s = s.toString().toLowerCase();
+                s = s.toString().toLowerCase(Locale.getDefault());
 
-                final List<Fair> fliteredList = new ArrayList<>();
+                 fliteredList = new ArrayList<>();
+                if (s.length() == 0) {
+                    fliteredList.addAll(fairs);
+                }
+                else {
 
+                    for (int i = 0; i < fairs.size(); i++) {
+                        String text = fairs.get(i).getLocation();
+                        String source = fairs.get(i).getSource().toLowerCase();
+                        String destination = fairs.get(i).getDestionation().toLowerCase();
+                        Log.e("search", text);
+                        Log.e("search", s.toString());
+                        if (text.contains(s) || source.contains(s) || destination.contains(s)) {
+                            fliteredList.add(fairs.get(i));
+                        }
 
-                for (int i = 0; i<data.size();i++){
-                    final String text = data.get(i).getLocation();
-                    Log.e("search",text);
-                    Log.e("search",s.toString());
-                    if(text.contains(s))
-                    {
-                        fliteredList.add(data.get(i));
                     }
-
                 }
 
                 fairList.setLayoutManager(new LinearLayoutManager(getContext()));

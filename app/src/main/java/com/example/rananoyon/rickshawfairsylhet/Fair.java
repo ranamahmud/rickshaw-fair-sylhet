@@ -7,11 +7,15 @@ public class Fair {
     private String number;
     private String location;
     private String fair;
+    private String source;
+    private String destionation;
 
-    public Fair(String number, String location, String fair) {
+    public Fair(String number, String location, String fair,String source, String destionation) {
         this.number = number;
         this.location = location;
         this.fair = fair;
+        this.source = source;
+        this.destionation = destionation;
     }
 
     public String getNumber() {
@@ -25,4 +29,6 @@ public class Fair {
     public String getFair() {
         return fair;
     }
+    public  String getSource(){return source;}
+    public  String getDestionation(){return  destionation;}
 }
