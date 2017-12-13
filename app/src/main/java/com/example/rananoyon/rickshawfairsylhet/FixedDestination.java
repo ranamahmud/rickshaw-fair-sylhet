@@ -14,6 +14,12 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,13 +88,35 @@ public class FixedDestination extends Fragment {
 
         //inserting elements in list
         fairList = (RecyclerView) view.findViewById(R.id.list);
-       // data = fill_with_data();
         data = new ArrayList<>();
-        data.add(new Fair("one","two","three"));
-        data.add(new Fair("one","two","three"));
-        data.add(new Fair("one","two","three"));
-        data.add(new Fair("one","two","three"));
-        data.add(new Fair("rana","rana","three"));
+        //read data from file
+        InputStream fairData = getContext().getResources().openRawResource(R.raw.fair);
+
+        String fairLine;
+        try {
+
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(fairData));
+            while ((fairLine = bufferedReader.readLine()) != null) {
+                String[] row = fairLine.split("\t");
+              //  data.add(new Fair(row[0],row[1],row[2]));
+
+                Log.e("row", String.valueOf(fairLine));
+                //word = new Word(row[0], row[1]);
+                //wordList.add(word);
+            }
+            Log.e("row","success");
+        } catch (IOException e) {
+            Log.e("row","failure)");
+
+        }
+
+        // data = fill_with_data();
+
+//        data.add(new Fair("one","two","three"));
+//        data.add(new Fair("one","two","three"));
+//        data.add(new Fair("one","two","three"));
+//        data.add(new Fair("one","two","three"));
+//        data.add(new Fair("rana","rana","three"));
         adapter = new FairAdapter(data,getContext());
         fairList.setAdapter(adapter);
         fairList.setLayoutManager(new LinearLayoutManager(getContext()));
