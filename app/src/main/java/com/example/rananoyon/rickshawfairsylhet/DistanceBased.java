@@ -113,6 +113,9 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         View view = inflater.inflate(R.layout.fragment_distance_based, container, false);
         // Inflate the layout for this fragment
 
+
+
+
         mapView = view.findViewById(R.id.mapView);
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(this);
@@ -149,6 +152,11 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         SupportPlaceAutocompleteFragment startLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
                 getChildFragmentManager().findFragmentById(R.id.startLocation);
         startLocationAutocompleteFragment.setHint("Search Start");
+
+        startLocationAutocompleteFragment.setBoundsBias(new LatLngBounds(
+                new LatLng(23.9911, 90.9124),
+                new LatLng(25.2078, 92.4985)
+                ));
         startLocationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
             @Override
@@ -172,6 +180,12 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         SupportPlaceAutocompleteFragment finishLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
                 getChildFragmentManager().findFragmentById(R.id.finishLocation);
         finishLocationAutocompleteFragment.setHint("Search Destination");
+        finishLocationAutocompleteFragment.setBoundsBias(new LatLngBounds(
+
+        new LatLng(23.9911, 90.9124),
+                new LatLng(25.2078, 92.4985)
+
+        ));
         finishLocationAutocompleteFragment.setOnPlaceSelectedListener(new PlaceSelectionListener() {
 
             @Override
