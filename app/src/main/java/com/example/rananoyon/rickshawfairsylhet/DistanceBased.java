@@ -264,8 +264,12 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         Place finishPlace = finish;
         LatLng origin = startPlace.getLatLng();
         LatLng destination = finishPlace.getLatLng();
-        DrawRouteMaps.getInstance(getContext())
-                .draw(origin, destination, map);
+      //  DrawRouteMaps.getInstance(getContext())
+          //      .draw(origin, destination, map);
+
+
+
+
         map.addMarker(new MarkerOptions().position(startPlace.getLatLng()).title(String.valueOf(startPlace.getName())));
         map.addMarker(new MarkerOptions().position(finishPlace.getLatLng()).title(String.valueOf(finishPlace.getName())));
 
