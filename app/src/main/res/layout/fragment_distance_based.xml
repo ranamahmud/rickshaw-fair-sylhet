@@ -70,8 +70,9 @@
         android:id="@+id/distance_km"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/distance"
-        android:layout_alignBottom="@+id/distance"
+        android:layout_below="@+id/getDirectionsButton"
+        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:layout_toEndOf="@+id/distance"
         android:layout_toRightOf="@+id/distance"
         android:text=" 0.0 km"
@@ -90,8 +91,11 @@
         android:id="@+id/fair"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_alignEnd="@+id/getDirectionsButton"
+        android:layout_alignRight="@+id/getDirectionsButton"
         android:layout_below="@+id/getDirectionsButton"
-        android:layout_centerHorizontal="true"
+        android:layout_marginEnd="15dp"
+        android:layout_marginRight="15dp"
         android:text="Fair:"
         android:textSize="18sp" />
 
@@ -100,8 +104,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/getDirectionsButton"
-        android:layout_toEndOf="@+id/fair"
-        android:layout_toRightOf="@+id/fair"
+        android:layout_toEndOf="@+id/getDirectionsButton"
+        android:layout_toRightOf="@+id/getDirectionsButton"
         android:text="0.0 Taka"
         android:textSize="18sp" />
 

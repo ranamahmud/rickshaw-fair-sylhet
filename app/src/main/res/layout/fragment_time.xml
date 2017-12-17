@@ -69,18 +69,20 @@
             >
         </Button>
     </LinearLayout>
+
     <TextView
         android:id="@+id/fair_view"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
         android:layout_centerHorizontal="true"
+        android:layout_gravity="center_horizontal"
         android:layout_marginTop="0dp"
+        android:paddingTop="10dp"
+
         android:text="Fair"
         android:textAppearance="?android:attr/textAppearanceMedium"
-
-        android:layout_gravity="center_horizontal"
-        android:textSize="92sp"/>
+        android:textSize="92sp" />
     <TextView
         android:id="@+id/fair_amount_view"
         android:layout_width="wrap_content"

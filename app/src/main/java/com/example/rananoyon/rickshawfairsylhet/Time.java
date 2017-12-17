@@ -170,6 +170,7 @@ public class Time extends Fragment {
     }
     private void updateTimer(float time){
         long secs = (long)(time/1000);
+        double totalSec = time/1000;
         long mins = secs/60;
         long hours = mins/60;
         secs = secs % 60;
@@ -201,10 +202,11 @@ public class Time extends Fragment {
             ((TextView)getView().findViewById(R.id.timer)).setText(hour+":"+minutes+":"+seconds);
 
 
-                double totalFair = (fair*100/3600)*secs;
+                double totalFair = (fair*100/3600)*totalSec;
+              //  Log.e("sec", String.valueOf(secs));
                 double tk = totalFair/100;
                 String finalFair = String.format("%.2f", tk)+" Taka";
-            Log.e("fair",tk+" "+"Total "+ totalFair);
+          //  Log.e("fair",tk+" "+"Total "+ totalFair);
                 ((TextView)getView().findViewById(R.id.fair_time)).setText(finalFair);
 
 
