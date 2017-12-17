@@ -13,5 +13,6 @@
     <string name="resetText">reset</string>
     <string name="stopText">stop</string>
     <string name="fair_time">0.00 Taka</string>
+    <string name="server_error">Server error. Something when wrong with the server</string>
 
 </resources>
