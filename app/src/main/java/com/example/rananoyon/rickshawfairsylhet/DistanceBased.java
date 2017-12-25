@@ -65,7 +65,7 @@ import java.util.List;
  * Use the {@link DistanceBased#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class DistanceBased extends Fragment implements OnMapReadyCallback {
+public class DistanceBased extends Fragment   {
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -78,9 +78,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
     private String mParam2;
 
     private OnFragmentInteractionListener mListener;
-    private GoogleMap map;
-    private MapView mapView;
-    private boolean mapReady = false;
+
     private Button button;
     private Place startPlace;
     private Place finishPlace;
@@ -131,9 +129,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
 
 
 
-        mapView = view.findViewById(R.id.mapView);
-        mapView.onCreate(savedInstanceState);
-        mapView.getMapAsync(this);
+
         button = view.findViewById(R.id.getDirectionsButton);
         distanceTextView = view.findViewById(R.id.distance_km);
         fairTextView = view.findViewById(R.id.fair_tk);
@@ -143,7 +139,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
             @Override
             public void onClick(View view) {
                 // Toast.makeText(getActivity(), "Button Clicked", Toast.LENGTH_LONG).show();
-                if (mapReady == true) {
+
                     if (startPlace == null || finishPlace == null) {
                         Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
 
@@ -154,14 +150,11 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                         if ((startingAddress.equals("")) || finalAddress.equals("")) {
                             Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
                         } else {
-                            map.clear();
-                            DrawRoute(map, startPlace, finishPlace);
+
                             getDistanceInfo(startPlace, finishPlace);
                         }
                     }
-                } else {
-                    Log.e("map", "Map not ready");
-                }
+
             }
         });
         SupportPlaceAutocompleteFragment startLocationAutocompleteFragment = (SupportPlaceAutocompleteFragment)
@@ -248,63 +241,10 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
         mListener = null;
     }
 
-    @Override
-    public void onMapReady(GoogleMap googleMap) {
-        mapReady = true;
-        map = googleMap;
-        // Toast.makeText(getActivity(), "Map is ready", Toast.LENGTH_LONG).show();
-
-        map = googleMap;
-        if (startPlace == null || finishPlace == null) {
-            Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
-
-        } else {
-            String startingAddress = startPlace.getName().toString();
-            String finalAddress = finishPlace.getName().toString();
-
-            if ((startingAddress.equals("")) || finalAddress.equals("")) {
-                Toast.makeText(getContext(), "Enter a starting and Destination address", Toast.LENGTH_SHORT).show();
-            } else {
-                map.clear();
-                DrawRoute(map, startPlace, finishPlace);
-            }
-
-        }
-
-
-    }
-
-    private void DrawRoute(GoogleMap googleMap, Place start, Place finish) {
-        GoogleMap map = googleMap;
-        Place startPlace = start;
-        Place finishPlace = finish;
-        LatLng origin = startPlace.getLatLng();
-        LatLng destination = finishPlace.getLatLng();
-      //  DrawRouteMaps.getInstance(getContext())
-          //      .draw(origin, destination, map);
-
-        String directionApiPath = Helper.getUrl(String.valueOf(origin.latitude), String.valueOf(origin.longitude),
-                String.valueOf(destination.latitude), String.valueOf(destination.longitude));
-        Log.d(TAG, "Path " + directionApiPath);
-        getDirectionFromDirectionApiServer(directionApiPath);
-
-     //   map.moveCamera(CameraUpdateFactory.newLatLng(origin));
-      //  map.animateCamera(CameraUpdateFactory.zoomTo(11));
-
-        map.addMarker(new MarkerOptions().position(startPlace.getLatLng()).title(String.valueOf(startPlace.getName())));
-        map.addMarker(new MarkerOptions().position(finishPlace.getLatLng()).title(String.valueOf(finishPlace.getName())));
 
 
 
-        LatLngBounds bounds = new LatLngBounds.Builder()
-                .include(origin)
-                .include(destination).build();
-        Point displaySize = new Point();
-        getActivity().getWindowManager().getDefaultDisplay().getSize(displaySize);
 
-        map.moveCamera(CameraUpdateFactory.newLatLngBounds(bounds, displaySize.x, 250, 50));
-
-    }
 
     /**
      * This interface must be implemented by activities that contain this
@@ -370,7 +310,7 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
                             }
                         }
 
-                        String result = " " + dist + " KM";
+                        String result = " " + dist + " km";
                         distanceTextView.setText(result);
                         totalFair = 0;
                         if(dist!=0){
@@ -406,111 +346,5 @@ public class DistanceBased extends Fragment implements OnMapReadyCallback {
 
 
     }
-
-
-
-    private void getDirectionFromDirectionApiServer(String url){
-        GsonRequest<DirectionObject> serverRequest = new GsonRequest<DirectionObject>(
-                Request.Method.GET,
-                url,
-                DirectionObject.class,
-                createRequestSuccessListener(),
-                createRequestErrorListener());
-        serverRequest.setRetryPolicy(new DefaultRetryPolicy(
-                Helper.MY_SOCKET_TIMEOUT_MS,
-                DefaultRetryPolicy.DEFAULT_MAX_RETRIES,
-                DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySingleton.getInstance(getContext()).addToRequestQueue(serverRequest);
-    }
-
-    private Response.Listener<DirectionObject> createRequestSuccessListener() {
-        return new Response.Listener<DirectionObject>() {
-            @Override
-            public void onResponse(DirectionObject response) {
-                try {
-                    Log.d("JSON Response", response.toString());
-                    if(response.getStatus().equals("OK")){
-                        List<LatLng> mDirections = getDirectionPolylines(response.getRoutes());
-                        drawRouteOnMap(map, mDirections);
-                    }else{
-                        Toast.makeText(getActivity(), R.string.server_error, Toast.LENGTH_SHORT).show();
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            };
-        };
-    }
-    private List<LatLng> getDirectionPolylines(List<RouteObject> routes){
-        List<LatLng> directionList = new ArrayList<LatLng>();
-        for(RouteObject route : routes){
-            List<LegsObject> legs = route.getLegs();
-            for(LegsObject leg : legs){
-                List<StepsObject> steps = leg.getSteps();
-                for(StepsObject step : steps){
-                    PolylineObject polyline = step.getPolyline();
-                    String points = polyline.getPoints();
-                    List<LatLng> singlePolyline = decodePoly(points);
-                    for (LatLng direction : singlePolyline){
-                        directionList.add(direction);
-                    }
-                }
-            }
-        }
-        return directionList;
-    }
-    private Response.ErrorListener createRequestErrorListener() {
-        return new Response.ErrorListener() {
-            @Override
-            public void onErrorResponse(VolleyError error) {
-                error.printStackTrace();
-            }
-        };
-    }
-    private void drawRouteOnMap(GoogleMap map, List<LatLng> positions){
-        PolylineOptions options = new PolylineOptions().width(5).color(Color.BLUE).geodesic(true);
-        options.addAll(positions);
-        Polyline polyline = map.addPolyline(options);
-      //  CameraPosition cameraPosition = new CameraPosition.Builder()
-        //        .target(new LatLng(positions.get(1).latitude, positions.get(1).longitude))
-          //      .zoom(10)
-            //    .build();
-       // map.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-    }
-    /**
-     * Method to decode polyline points
-     * Courtesy : http://jeffreysambells.com/2010/05/27/decoding-polylines-from-google-maps-direction-api-with-java
-     * */
-    private List<LatLng> decodePoly(String encoded) {
-        List<LatLng> poly = new ArrayList<>();
-        int index = 0, len = encoded.length();
-        int lat = 0, lng = 0;
-        while (index < len) {
-            int b, shift = 0, result = 0;
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            int dlat = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lat += dlat;
-            shift = 0;
-            result = 0;
-            do {
-                b = encoded.charAt(index++) - 63;
-                result |= (b & 0x1f) << shift;
-                shift += 5;
-            } while (b >= 0x20);
-            int dlng = ((result & 1) != 0 ? ~(result >> 1) : (result >> 1));
-            lng += dlng;
-            LatLng p = new LatLng((((double) lat / 1E5)),
-                    (((double) lng / 1E5)));
-            poly.add(p);
-        }
-        return poly;
-    }
-
-
-
 
 }
