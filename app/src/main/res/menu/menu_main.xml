@@ -2,9 +2,14 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.rananoyon.rickshawfairsylhet.MainActivity">
-    <item
-        android:id="@+id/action_settings"
-        android:orderInCategory="100"
-        android:title="@string/action_settings"
-        app:showAsAction="never" />
+
+    <item android:id="@+id/about"
+        android:icon="@android:drawable/ic_dialog_info"
+        android:title="@string/about"
+        app:showAsAction="never"/>
+    <item android:id="@+id/help"
+        android:icon="@android:drawable/ic_menu_help"
+        android:title="@string/help"
+        app:showAsAction="never"/>
+
 </menu>

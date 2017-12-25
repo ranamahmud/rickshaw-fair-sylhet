@@ -1,5 +1,6 @@
 package com.example.rananoyon.rickshawfairsylhet;
 
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
@@ -55,53 +56,11 @@ private static final String TAG = "AnonymousAuth";
         TabLayout tabLayout = (TabLayout) findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
 
-        // [START initialize_auth]
-       // mAuth = FirebaseAuth.getInstance();
-// [END initialize_auth
-        // Check if user is signed in (non-null) and update UI accordingly.
-      //  FirebaseUser currentUser = mAuth.getCurrentUser();
-//        if(currentUser == null) {
-//            //Sign in anonymously
-//
-//            mAuth.signInAnonymously()
-//                    .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-//                        @Override
-//                        public void onComplete(@NonNull Task<AuthResult> task) {
-//                            if (task.isSuccessful()) {
-//                                // Sign in success, update UI with the signed-in user's information
-//                                Log.d(TAG, "signInAnonymously:success");
-//                                FirebaseUser user = mAuth.getCurrentUser();
-//                                Toast.makeText(MainActivity.this, "Signed In Successfully",
-//                                        Toast.LENGTH_SHORT).show();
-//                                setFairPrice();
-//
-//                            } else {
-//                                // If sign in fails, display a message to the user.
-//                                Log.w(TAG, "signInAnonymously:failure", task.getException());
-//                                Toast.makeText(MainActivity.this, "Authentication failed.",
-//                                        Toast.LENGTH_SHORT).show();
-//
-//                            }
-//
-//
-//                        }
-//                    });
-//
-//
-//        } else if (currentUser!=null){
-//            setFairPrice();
-//        }
+
 
 
     }
 
-//    private void setFairPrice() {
-//
-//        FirebaseDatabase database = FirebaseDatabase.getInstance();
-//        DatabaseReference myRef = database.getReference("rickshaw/fair");
-//        //myRef.setValue("50");//This line is for setting
-//        myRef.setValue(50);
-//    }
 
 
     @Override
@@ -116,14 +75,20 @@ private static final String TAG = "AnonymousAuth";
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-
-        //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        // Handle item selection
+        switch (item.getItemId()) {
+            case R.id.about:
+                Intent about = new Intent(this,About.class);
+                startActivity(about);
+                return true;
+            case R.id.help:
+                Intent help = new Intent(this,Help.class);
+                startActivity(help);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
 
-        return super.onOptionsItemSelected(item);
     }
 
     @Override
